@@ -1,0 +1,1 @@
+import /tensorflow/.tf_configure.bazelrc
