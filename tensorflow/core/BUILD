@@ -1219,6 +1219,7 @@ cc_library(
         ":core_cpu",
         ":gpu_runtime",
         ":sycl_runtime",
+        ":epu_runtime",
     ],
 )
 
@@ -3003,6 +3004,32 @@ cc_library(
         "@local_config_sycl//sycl",
     ],
     alwayslink = 0,
+)
+
+cc_library(
+    name = "epu_runtime",
+    srcs = ["common_runtime/epu/epu_device.cc",
+            "common_runtime/epu/epu_device_factory.cc",
+            "common_runtime/epu/epu_device_context.cc",
+            "common_runtime/epu/epu_allocator.cc",
+    ],
+    hdrs = ["common_runtime/epu/epu_device.h",
+            "common_runtime/epu/epu_device_factory.h",
+            "common_runtime/epu/epu_device_context.h",
+            "common_runtime/epu/epu_allocator.h",
+    ],
+    copts = tf_copts(),
+    linkstatic = 1,
+    deps = [
+        ":core_cpu_internal",
+        ":framework",
+        ":lib",
+        ":lib_internal",
+        ":proto_text",
+        ":protos_all_cc",
+#        "@acore//:epu_nn_header",
+    ],
+    alwayslink = 1,
 )
 
 # -----------------------------------------------------------------------------
