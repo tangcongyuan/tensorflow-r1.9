@@ -110,6 +110,10 @@ void SendOp::Compute(OpKernelContext* ctx) {
 REGISTER_KERNEL_BUILDER(Name("_Send").Device(DEVICE_CPU), SendOp);
 REGISTER_KERNEL_BUILDER(Name("_Send").Device(DEVICE_GPU), SendOp);
 
+#if TENSORFLOW_USE_EPU
+REGISTER_KERNEL_BUILDER(Name("_Send").Device(DEVICE_EPU), SendOp);
+#endif
+
 #ifdef TENSORFLOW_USE_SYCL
 REGISTER_KERNEL_BUILDER(Name("_Send").Device(DEVICE_SYCL), SendOp);
 REGISTER_KERNEL_BUILDER(
@@ -119,6 +123,10 @@ REGISTER_KERNEL_BUILDER(
 REGISTER_KERNEL_BUILDER(Name("_HostSend").Device(DEVICE_CPU), SendOp);
 REGISTER_KERNEL_BUILDER(
     Name("_HostSend").Device(DEVICE_GPU).HostMemory("tensor"), SendOp);
+
+#if TENSORFLOW_USE_EPU
+REGISTER_KERNEL_BUILDER(Name("_HostSend").Device(DEVICE_EPU), SendOp);
+#endif
 
 RecvOp::RecvOp(OpKernelConstruction* ctx) : AsyncOpKernel(ctx) {
   string send_device;
@@ -197,6 +205,10 @@ void RecvOp::ComputeAsync(OpKernelContext* ctx, DoneCallback done) {
 REGISTER_KERNEL_BUILDER(Name("_Recv").Device(DEVICE_CPU), RecvOp);
 REGISTER_KERNEL_BUILDER(Name("_Recv").Device(DEVICE_GPU), RecvOp);
 
+#ifdef TENSORFLOW_USE_EPU
+REGISTER_KERNEL_BUILDER(Name("_Recv").Device(DEVICE_EPU), RecvOp);
+#endif
+
 #ifdef TENSORFLOW_USE_SYCL
 REGISTER_KERNEL_BUILDER(Name("_Recv").Device(DEVICE_SYCL), RecvOp);
 #endif  // TENSORFLOW_USE_SYCL
@@ -204,6 +216,10 @@ REGISTER_KERNEL_BUILDER(Name("_Recv").Device(DEVICE_SYCL), RecvOp);
 REGISTER_KERNEL_BUILDER(Name("_HostRecv").Device(DEVICE_CPU), RecvOp);
 REGISTER_KERNEL_BUILDER(
     Name("_HostRecv").Device(DEVICE_GPU).HostMemory("tensor"), RecvOp);
+
+#ifdef TENSORFLOW_USE_EPU
+REGISTER_KERNEL_BUILDER(Name("_HostRecv").Device(DEVICE_EPU), RecvOp);
+#endif
 
 #ifdef TENSORFLOW_USE_SYCL
 REGISTER_KERNEL_BUILDER(
