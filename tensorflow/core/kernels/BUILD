@@ -3233,6 +3233,7 @@ tf_kernel_library(
         "conv_grad_ops.cc",
         "conv_grad_ops_3d.cc",
         "deep_conv2d.cc",
+        "epu_conv_ops.cc",
     ] + select({
         ":xsmm_convolutions": ["xsmm_conv2d.cc"],
         "//conditions:default": [],
@@ -3273,6 +3274,7 @@ tf_kernel_library(
         ":ops_util",
         "//tensorflow/core:core_cpu",
         "//tensorflow/core:framework",
+        "//tensorflow/core:epu_runtime",
         "//tensorflow/core:lib",
         "//tensorflow/core:lib_internal",
         "//tensorflow/core:nn_ops_op_lib",

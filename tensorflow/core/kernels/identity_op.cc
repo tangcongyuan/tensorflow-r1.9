@@ -150,4 +150,42 @@ REGISTER_GPU_HOST_KERNEL(string);
 
 #endif
 
+#if TENSORFLOW_USE_EPU
+#define REGISTER_EPU_KERNEL(type)                                           \
+  REGISTER_KERNEL_BUILDER(                                                  \
+      Name("Identity").Device(DEVICE_EPU).TypeConstraint<type>("T"),        \
+      IdentityOp);                                                          \
+  REGISTER_KERNEL_BUILDER(                                                  \
+      Name("PreventGradient").Device(DEVICE_EPU).TypeConstraint<type>("T"), \
+      IdentityOp);                                                          \
+  REGISTER_KERNEL_BUILDER(                                                  \
+      Name("RefIdentity").Device(DEVICE_EPU).TypeConstraint<type>("T"),     \
+      IdentityOp);                                                          \
+  REGISTER_KERNEL_BUILDER(                                                  \
+      Name("StopGradient").Device(DEVICE_EPU).TypeConstraint<type>("T"),    \
+      IdentityOp)                                                           \
+  REGISTER_KERNEL_BUILDER(Name("PlaceholderWithDefault")                    \
+                              .Device(DEVICE_EPU)                           \
+                              .TypeConstraint<type>("T"),                   \
+                          IdentityOp)                                       \
+  REGISTER_KERNEL_BUILDER(Name("DebugGradientIdentity")                     \
+                              .Device(DEVICE_EPU)                           \
+                              .TypeConstraint<type>("T"),                   \
+                          IdentityOp)                                       \
+  REGISTER_KERNEL_BUILDER(Name("DebugGradientRefIdentity")                  \
+                              .Device(DEVICE_EPU)                           \
+                              .TypeConstraint<type>("T"),                   \
+                          IdentityOp)
+
+TF_CALL_half(REGISTER_EPU_KERNEL);
+
+// Though EPU only support half precision, we still need to register float32
+// for identity op
+TF_CALL_float(REGISTER_EPU_KERNEL);
+
+#undef REGISTER_EPU_KERNEL
+
+#endif  // TENSORFLOW_USE_EPU
+
+
 }  // namespace tensorflow
